@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Boom.lol</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      cursor: none;
+    }
+
+    body {
+      background-color: #000;
+      overflow: hidden;
+      user-select: none;
+      font-family: sans-serif;
+    }
+
+    #gun {
+      position: absolute;
+      font-size: 60px;
+      transform: rotate(45deg);
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .bullet {
+      position: absolute;
+      font-size: 30px;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="gun">🔫</div>
+
+  <script>
+    const gun = document.getElementById('gun');
+    const projectiles = [
+      '💥', '🔥', '💣', '🎨', '🌈', '🎉', '🚀', '🍕', '🦄', '🧠', '🤪', '👻', '⚡', '🌟', '🎊', '🔶', '🎯'
+    ];
+
+    // Move gun with mouse
+    document.addEventListener('mousemove', (e) => {
+      gun.style.left = `${e.clientX - 20}px`;
+      gun.style.top = `${e.clientY - 40}px`;
+    });
+
+    // Shoot on click
+    document.addEventListener('click', (e) => {
+      const bullet = document.createElement('div');
+      bullet.className = 'bullet';
+      bullet.style.left = `${e.clientX}px`;
+      bullet.style.top = `${e.clientY}px`;
+      bullet.textContent = projectiles[Math.floor(Math.random() * projectiles.length)];
+      document.body.appendChild(bullet);
+
+      // Animate bullet
+      let x = e.clientX;
+      let y = e.clientY;
+      const speed = 7 + Math.random() * 3;
+
+      const interval = setInterval(() => {
+        x += (Math.random() - 0.5) * 10; // Slight horizontal drift
+        y -= speed;
+        bullet.style.left = `${x}px`;
+        bullet.style.top = `${y}px`;
+        bullet.style.opacity = Math.max(0, 1 - (window.innerHeight - y) / window.innerHeight);
+
+        if (y < -100) {
+          clearInterval(interval);
+          document.body.removeChild(bullet);
+        }
+      }, 30);
+
+      // Optional fun sound (uncomment if desired)
+      // (Note: Auto-play requires user interaction first)
+      /*
+      const sound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-jump-223.mp3");
+      sound.volume = 0.3;
+      sound.play().catch(e => console.log("Audio play failed:", e));
+      */
+    });
+  </script>
+
+</body>
+</html>
